@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, Menu, MessageSquare } from "lucide-react";
+import { Send, Menu, MessageSquare, ChevronLeft } from "lucide-react";
 import Sidebar from "./Sidebar";
 import MessageBubble from "./MessageBubble";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -56,11 +56,11 @@ const ChatInterface = ({ initialQuestion }: ChatInterfaceProps) => {
 
     setConversations([initialConversation]);
     
-    // Simulate AI response
+    // Simulate AI response with LaTeX
     setTimeout(() => {
       const aiResponse: Message = {
         id: "2",
-        content: "I understand your question about: \"" + initialQuestion + "\". Let me help you with that. This is a comprehensive response that addresses your concerns and provides detailed information to help solve your doubt.",
+        content: "I understand your question about: \"" + initialQuestion + "\". Let me help you with that.\n\nFor example, if you're asking about mathematics, here's the quadratic formula:\n\n$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$\n\nAnd here's an inline formula: $E = mc^2$\n\nThis is a comprehensive response that addresses your concerns and provides detailed information to help solve your doubt.",
         isUser: false,
         timestamp: new Date()
       };
@@ -103,11 +103,11 @@ const ChatInterface = ({ initialQuestion }: ChatInterfaceProps) => {
 
     setCurrentMessage("");
 
-    // Simulate AI response
+    // Simulate AI response with LaTeX
     setTimeout(() => {
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: "Thank you for your follow-up question. Here's a detailed response that addresses your query with helpful information and guidance.",
+        content: "Thank you for your follow-up question. Here's a detailed response that addresses your query with helpful information and guidance.\n\nHere's some mathematical notation: $$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$\n\nAnd some inline math: The value of $\\pi$ is approximately 3.14159.",
         isUser: false,
         timestamp: new Date()
       };
@@ -139,16 +139,16 @@ const ChatInterface = ({ initialQuestion }: ChatInterfaceProps) => {
         onClose={() => setSidebarOpen(false)}
       />
       
-      <div className="flex-1 flex flex-col">
+      <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen && !isMobile ? 'ml-0' : ''}`}>
         {/* Header */}
         <header className="bg-card border-b px-4 py-3 flex items-center gap-3">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="lg:hidden"
+            className="hover:bg-accent"
           >
-            <Menu className="w-5 h-5" />
+            {sidebarOpen ? <ChevronLeft className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
           
           <div className="flex items-center gap-2">

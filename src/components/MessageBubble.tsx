@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ThumbsUp, ThumbsDown, User, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,6 +18,7 @@ interface MessageBubbleProps {
 
 const MessageBubble = ({ message }: MessageBubbleProps) => {
   const [rating, setRating] = useState<'like' | 'dislike' | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const handleRating = (type: 'like' | 'dislike') => {
     setRating(type);
@@ -29,6 +30,43 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
     });
     console.log(`Message ${message.id} rated as ${type}`);
   };
+
+  useEffect(() => {
+    if (!message.isUser && contentRef.current) {
+      // Dynamically import and render KaTeX for AI messages
+      import('katex').then((katex) => {
+        const content = contentRef.current;
+        if (!content) return;
+
+        let html = message.content;
+        
+        // Replace display math ($$...$$)
+        html = html.replace(/\$\$([\s\S]*?)\$\$/g, (match, math) => {
+          try {
+            return katex.default.renderToString(math, { displayMode: true });
+          } catch (e) {
+            console.error('KaTeX display math error:', e);
+            return match;
+          }
+        });
+        
+        // Replace inline math ($...$)
+        html = html.replace(/\$([^$\n]+?)\$/g, (match, math) => {
+          try {
+            return katex.default.renderToString(math, { displayMode: false });
+          } catch (e) {
+            console.error('KaTeX inline math error:', e);
+            return match;
+          }
+        });
+        
+        // Convert newlines to <br> tags
+        html = html.replace(/\n/g, '<br>');
+        
+        content.innerHTML = html;
+      });
+    }
+  }, [message.content, message.isUser]);
 
   return (
     <div className={cn(
@@ -51,9 +89,18 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
             ? "bg-primary text-primary-foreground ml-auto" 
             : "bg-card border"
         )}>
-          <p className="text-sm leading-relaxed whitespace-pre-wrap">
-            {message.content}
-          </p>
+          {message.isUser ? (
+            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+              {message.content}
+            </p>
+          ) : (
+            <div 
+              ref={contentRef}
+              className="text-sm leading-relaxed prose prose-sm max-w-none prose-p:mb-2 prose-headings:mb-2 prose-headings:mt-4"
+            >
+              {message.content}
+            </div>
+          )}
           
           <div className="text-xs opacity-70 mt-2">
             {message.timestamp.toLocaleTimeString([], { 

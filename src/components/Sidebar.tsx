@@ -46,8 +46,8 @@ const Sidebar = ({
       
       {/* Sidebar */}
       <div className={cn(
-        "fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-card border-r transition-transform duration-300 ease-in-out",
-        isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0 lg:w-0 lg:border-r-0"
+        "fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-card border-r transition-all duration-300 ease-in-out",
+        isOpen ? "translate-x-0" : "-translate-x-full lg:-translate-x-full"
       )}>
         <div className="h-full flex flex-col">
           {/* Header */}

@@ -56,11 +56,11 @@ const ChatInterface = ({ initialQuestion }: ChatInterfaceProps) => {
 
     setConversations([initialConversation]);
     
-    // Simulate AI response with LaTeX
+    // Simulate AI response with comprehensive LaTeX examples
     setTimeout(() => {
       const aiResponse: Message = {
         id: "2",
-        content: "I understand your question about: \"" + initialQuestion + "\". Let me help you with that.\n\nFor example, if you're asking about mathematics, here's the quadratic formula:\n\n$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$\n\nAnd here's an inline formula: $E = mc^2$\n\nThis is a comprehensive response that addresses your concerns and provides detailed information to help solve your doubt.",
+        content: "Here's a step-by-step example of finding the derivative of a power function:\n\nLet's say we have \\(y = (3x + 2)^4\\). Here, \\(a = 3\\), \\(b = 2\\), and \\(m = 4\\). To find the first derivative, \\(y'\\), we use the formula \\(y' = m \\cdot a \\cdot (ax + b)^{m-1}\\).\n\n1. Substitute the values: \\(y' = 4 \\cdot 3 \\cdot (3x + 2)^{4-1}\\).\n2. Simplify: \\(y' = 12(3x + 2)^3\\).\n\nSo, the first derivative of \\(y = (3x + 2)^4\\) is:\n```latex\n\\boxed{y' = 12(3x + 2)^3}\n```\n\nHere are more examples with different notation styles:\n- Inline math: $E = mc^2$\n- Display math: $$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$\n- Parentheses notation: \\(\\frac{d}{dx}[x^n] = nx^{n-1}\\)",
         isUser: false,
         timestamp: new Date()
       };
@@ -107,7 +107,7 @@ const ChatInterface = ({ initialQuestion }: ChatInterfaceProps) => {
     setTimeout(() => {
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: "Thank you for your follow-up question. Here's a detailed response that addresses your query with helpful information and guidance.\n\nHere's some mathematical notation: $$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$\n\nAnd some inline math: The value of $\\pi$ is approximately 3.14159.",
+        content: "Thank you for your follow-up question. Here's a detailed response with mathematical notation:\n\nFor the general power rule: \\(\\frac{d}{dx}[x^n] = nx^{n-1}\\)\n\nExample with chain rule:\n```latex\n\\frac{d}{dx}[(2x+1)^3] = 3(2x+1)^2 \\cdot 2 = 6(2x+1)^2\n```\n\nThis demonstrates the combination of power rule and chain rule in calculus.",
         isUser: false,
         timestamp: new Date()
       };

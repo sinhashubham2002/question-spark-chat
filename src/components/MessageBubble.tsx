@@ -50,13 +50,33 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
           }
         });
         
-        // Replace inline math ($...$)
-        html = html.replace(/\$([^$\n]+?)\$/g, (match, math) => {
+        // Replace inline math with \(...\) delimiters
+        html = html.replace(/\\\(([\s\S]*?)\\\)/g, (match, math) => {
           try {
             return katex.default.renderToString(math, { displayMode: false });
           } catch (e) {
             console.error('KaTeX inline math error:', e);
             return match;
+          }
+        });
+        
+        // Replace inline math ($...$) - but not if it's in a code block
+        html = html.replace(/(?<!```[\s\S]*?)\$([^$\n]+?)\$(?![\s\S]*?```)/g, (match, math) => {
+          try {
+            return katex.default.renderToString(math, { displayMode: false });
+          } catch (e) {
+            console.error('KaTeX inline math error:', e);
+            return match;
+          }
+        });
+        
+        // Handle LaTeX code blocks (```latex...```)
+        html = html.replace(/```latex\n([\s\S]*?)\n```/g, (match, latexCode) => {
+          try {
+            return `<div class="my-4">${katex.default.renderToString(latexCode, { displayMode: true })}</div>`;
+          } catch (e) {
+            console.error('KaTeX code block error:', e);
+            return `<pre><code>${latexCode}</code></pre>`;
           }
         });
         
